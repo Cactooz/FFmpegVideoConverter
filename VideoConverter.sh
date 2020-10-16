@@ -8,10 +8,10 @@ echo ""
 echo "============================"
 echo "Video Converter using FFmpeg"
 echo "============================"
-echo ""
 
 
 if ! FFMPEGLOCATION="$(command -v ffmpeg)" || [ -z $FFMPEGLOCATION ]; then
+	echo ""
 	echo "FFmpeg is not installed"
 	echo "Do you want install it? (yes/no) "
 	while [ "$INSTALLFFMPEGLOOP" = true ]
@@ -32,7 +32,11 @@ if ! FFMPEGLOCATION="$(command -v ffmpeg)" || [ -z $FFMPEGLOCATION ]; then
 	done
 fi
 
-read -p "Input file (full path): " INPUTFILE
+echo ""
+read -p "Working directory (full path): " DIRECTORY
+echo "This is now the working directory: $DIRECTORY"
+echo ""
+read -p "Input file: " INPUTFILE
 echo ""
 
 echo "Do you want to add metadata? (yes/no) "
@@ -71,7 +75,7 @@ do
 		[Yy]* )
 			echo ""
 
-			read -p "Cover art file (full path): " ARTFILE
+			read -p "Cover art file (keep it in the same folder): " ARTFILE
 			
 			USEART=true
 			ARTLOOP=false
@@ -85,14 +89,14 @@ done
 
 echo ""
 
-read -p "Output file (full path): " OUTPUTFILE
+read -p "Output file: " OUTPUTFILE
 
 if [ "$USEART" = true ]; then
-	ffmpeg -i "$INPUTFILE" -c copy -loglevel warning -c:s  mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "TMP-$OUTPUTFILE"
-	ffmpeg -i "TMP-$OUTPUTFILE" -i "$ARTFILE" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$OUTPUTFILE"
-	rm "TMP-$OUTPUTFILE"
+	ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s  mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$DIRECTORY/TMP-$OUTPUTFILE"
+	ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$DIRECTORY/$ARTFILE" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
+	rm "$DIRECTORY/TMP-$OUTPUTFILE"
 else
-	ffmpeg -i "$INPUTFILE" -c copy -loglevel warning -c:s mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$OUTPUTFILE"
+	ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$DIRECTORY/$OUTPUTFILE"
 fi
 
 echo ""
