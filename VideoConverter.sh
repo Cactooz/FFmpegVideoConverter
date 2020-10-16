@@ -56,6 +56,7 @@ do
 			read -p "Language: " LANGUAGE
 			read -p "Resolution (SD=0, 720p=1, 1080p=2, 2160p=3): " QUALTIY
 
+			USEMETADATA=true
 			METADATALOOP=false
 			;;
 		[Nn]* )
@@ -91,12 +92,22 @@ echo ""
 
 read -p "Output file: " OUTPUTFILE
 
-if [ "$USEART" = true ]; then
-	ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s  mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$DIRECTORY/TMP-$OUTPUTFILE"
-	ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$DIRECTORY/$ARTFILE" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
-	rm "$DIRECTORY/TMP-$OUTPUTFILE"
+if [ "$USEMETADATA" = true ]; then
+	if [ "$USEART" = true ]; then
+		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$DIRECTORY/TMP-$OUTPUTFILE"
+		ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$DIRECTORY/$ARTFILE" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
+		rm "$DIRECTORY/TMP-$OUTPUTFILE"
+	else
+		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$DIRECTORY/$OUTPUTFILE"
+	fi
 else
-	ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$DIRECTORY/$OUTPUTFILE"
+	if [ "$USEART" = true ]; then
+		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text "$DIRECTORY/TMP-$OUTPUTFILE"
+		ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$DIRECTORY/$ARTFILE" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
+		rm "$DIRECTORY/TMP-$OUTPUTFILE"
+	else
+		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text "$DIRECTORY/$OUTPUTFILE"
+	fi
 fi
 
 echo ""
