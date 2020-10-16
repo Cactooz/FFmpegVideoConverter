@@ -44,6 +44,7 @@ Recommended formats for cover art is .png or .jpg files.
 ### Very Likley
 * More metadata
 * More Optimized code
+* Looping through full directory
 
 ### Possibly
 * .bat version for Windows
