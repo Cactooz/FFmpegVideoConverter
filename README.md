@@ -1,7 +1,8 @@
 # FFmpeg Video Converter
 A video converter Script using FFmpeg for Linux
 
-**NOTE that FFmpeg is needed for this script to work!**
+**NOTE** that FFmpeg is needed for this script to work!
+But the script can download it for you if you don't have it installed.
 
 ## Features
 * Convert videos from different file formats
