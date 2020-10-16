@@ -1,0 +1,16 @@
+# Temporary video files
+*.mkv
+*.avi
+*.mp4
+
+# Temporary cover art files
+*.jpg
+*.jpeg
+*.png
+
+# Temporary files
+TMP-*
+
+# Log files
+*.log
+log.*
