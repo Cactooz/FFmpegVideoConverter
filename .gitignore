@@ -1,15 +1,58 @@
 # Temporary video files
-*.mkv
+*.3g2
+*.3gp
+*.asf
+*.asx
 *.avi
+*.flv
+*.mov
+*.mkv
 *.mp4
+*.mpg
+*.ogv
+*.rm
+*.swf
+*.vob
+*.wmv
+*.webm
 
 # Temporary cover art files
 *.jpg
 *.jpeg
+*.jpe
+*.jif
+*.jfif
+*.jfi
+*.jp2
+*.j2k
+*.jpf
+*.jpx
+*.jpm
+*.mj2
+*.jxr
+*.hdp
+*.wdp
+*.gif
+*.raw
+*.webp
 *.png
+*.apng
+*.mng
+*.tiff
+*.tif
+*.svg
+*.svgz
+*.pdf
+*.xbm
+*.bmp
+*.dib
+*.ico
+*.3dm
+*.max
 
 # Temporary files
 TMP-*
+*.tmp
 
 # Log files
 *.log
