@@ -43,6 +43,7 @@ Recommended formats for cover art is .png or .jpg files.
 
 ### Very Likley
 * More metadata
+* Add subtitles .srt
 * More Optimized code
 * Looping through full directory
 
