@@ -3,6 +3,7 @@
 METADATALOOP=true
 INSTALLFFMPEGLOOP=true
 ARTLOOP=true
+ARTDIRLOOP=true
 
 echo ""
 echo "============================"
@@ -13,7 +14,7 @@ echo "============================"
 if ! FFMPEGLOCATION="$(command -v ffmpeg)" || [ -z $FFMPEGLOCATION ]; then
 	echo ""
 	echo "FFmpeg is not installed"
-	echo "Do you want install it? (yes/no) "
+	echo "Do you want install it? (yes/no)"
 	while [ "$INSTALLFFMPEGLOOP" = true ]
 	do
 		read INSTALLFFMPEGANSWER
@@ -44,7 +45,7 @@ echo ""
 read -p "Input file: " INPUTFILE
 echo ""
 
-echo "Do you want to add metadata? (yes/no) "
+echo "Do you want to add metadata? (yes/no)"
 while [ "$METADATALOOP" = true ]
 do
 	read METADATAANSWER
@@ -73,7 +74,7 @@ done
 
 echo ""
 
-echo "Do you want to add cover art? (yes/no) "
+echo "Do you want to add cover art? (yes/no)"
 while [ "$ARTLOOP" = true ]
 do
 	read ARTANSWER
@@ -81,8 +82,31 @@ do
 		[Yy]* )
 			echo ""
 
-			read -p "Cover art file (keep it in the same folder): " ARTFILE
-			
+			echo "Is the cover art in the same directory as: $DIRECTORY? (yes/no)"
+			while [ "$ARTDIRLOOP" = true ]
+			do
+				read ARTDIRANSWER
+				case $ARTDIRANSWER in
+					[Yy]* )
+						ARTDIR=$DIRECTORY
+
+						ARTDIRLOOP=false
+						;;
+					[Nn]* )
+						echo ""
+						read -p "Directory for cover art: " ARTDIR
+
+						ARTDIRLOOP=false
+						;;
+					* ) echo "Please answer yes or no.";;
+				esac
+			done
+
+			echo ""
+			read -p "Cover art file: " ARTFILE
+
+			ARTLOCATION=$ARTDIR/$ARTFILE
+
 			USEART=true
 			ARTLOOP=false
 			;;
@@ -103,7 +127,7 @@ if [ "$USEMETADATA" = true ]; then
 		echo "Writing metadata"
 		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$DIRECTORY/TMP-$OUTPUTFILE"
 		echo "Adding cover art"
-		ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$DIRECTORY/$ARTFILE" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
+		ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$ARTLOCATION" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
 		echo "Removing temp files"
 		rm "$DIRECTORY/TMP-$OUTPUTFILE"
 	else
@@ -115,7 +139,7 @@ else
 		echo "Converting file"
 		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text "$DIRECTORY/TMP-$OUTPUTFILE"
 		echo "Adding cover art"
-		ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$DIRECTORY/$ARTFILE" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
+		ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$ARTLOCATION" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
 		echo "Removing temp files"
 		rm "$DIRECTORY/TMP-$OUTPUTFILE"
 	else
