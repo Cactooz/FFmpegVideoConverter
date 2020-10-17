@@ -33,8 +33,13 @@ if ! FFMPEGLOCATION="$(command -v ffmpeg)" || [ -z $FFMPEGLOCATION ]; then
 fi
 
 echo ""
-read -p "Working directory (full path): " DIRECTORY
-echo "This is now the working directory: $DIRECTORY"
+read -p "Working directory (full path or . to use current directory): " DIRECTORY
+if [ "$DIRECTORY" = "." ]; then
+	echo "Using current directory"
+else
+	echo "This is now the working directory: $DIRECTORY"
+fi
+
 echo ""
 read -p "Input file: " INPUTFILE
 echo ""
@@ -89,23 +94,32 @@ do
 done
 
 echo ""
-
 read -p "Output file: " OUTPUTFILE
+echo ""
 
 if [ "$USEMETADATA" = true ]; then
 	if [ "$USEART" = true ]; then
+		echo "Converting file"
+		echo "Writing metadata"
 		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$DIRECTORY/TMP-$OUTPUTFILE"
+		echo "Adding cover art"
 		ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$DIRECTORY/$ARTFILE" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
+		echo "Removing temp files"
 		rm "$DIRECTORY/TMP-$OUTPUTFILE"
 	else
+		echo "Converting file"
 		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$DIRECTORY/$OUTPUTFILE"
 	fi
 else
 	if [ "$USEART" = true ]; then
+		echo "Converting file"
 		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text "$DIRECTORY/TMP-$OUTPUTFILE"
+		echo "Adding cover art"
 		ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$DIRECTORY/$ARTFILE" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
+		echo "Removing temp files"
 		rm "$DIRECTORY/TMP-$OUTPUTFILE"
 	else
+		echo "Converting file"
 		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text "$DIRECTORY/$OUTPUTFILE"
 	fi
 fi
