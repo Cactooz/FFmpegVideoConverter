@@ -4,6 +4,10 @@ METADATALOOP=true
 INSTALLFFMPEGLOOP=true
 ARTLOOP=true
 ARTDIRLOOP=true
+SUBTITLELOOP=true
+SUBTITLEDIRLOOP=true
+TMPLEVEL=0
+TMPCHANGE=false
 
 echo ""
 echo "============================"
@@ -64,9 +68,61 @@ do
 
 			USEMETADATA=true
 			METADATALOOP=false
+			TMPLEVEL=$((TMPLEVEL+1))
+			TMPCHANGE=true
 			;;
 		[Nn]* )
 			METADATALOOP=false
+			;;
+		* ) echo "Please answer yes or no.";;
+	esac
+done
+
+echo ""
+
+echo "Do you want to add subtitles? (yes/no)"
+while [ "$SUBTITLELOOP" = true ]
+do
+	read SUBTITLEANSWER
+	case $SUBTITLEANSWER in
+		[Yy]* )
+			echo ""
+
+			echo "Is the subtitles in the same directory as: $DIRECTORY? (yes/no)"
+			while [ "$SUBTITLEDIRLOOP" = true ]
+			do
+				read SUBTITLEDIRANSWER
+				case $SUBTITLEDIRANSWER in
+					[Yy]* )
+						SUBTITLEDIR=$DIRECTORY
+
+						SUBTITLEDIRLOOP=false
+						;;
+					[Nn]* )
+						echo ""
+						read -p "Directory for subtitles: " SUBTITLEDIR
+
+						SUBTITLEDIRLOOP=false
+						;;
+					* ) echo "Please answer yes or no.";;
+				esac
+			done
+
+			echo ""
+			read -p "Subtitle file: " SUBTITLEFILE
+
+			SUBTITLE=$SUBTITLEDIR/$SUBTITLEFILE
+
+			echo ""
+			read -p "Subtitle language (example: eng): " SUBTITLELANGUAGE
+
+			USESUBTITLES=true
+			SUBTITLELOOP=false
+			TMPLEVEL=$((TMPLEVEL+1))
+			TMPCHANGE=true
+			;;
+		[Nn]* )
+			SUBTITLELOOP=false
 			;;
 		* ) echo "Please answer yes or no.";;
 	esac
@@ -109,6 +165,7 @@ do
 
 			USEART=true
 			ARTLOOP=false
+			TMPLEVEL=$((TMPLEVEL+1))
 			;;
 		[Nn]* )
 			ARTLOOP=false
@@ -121,32 +178,21 @@ echo ""
 read -p "Output file: " OUTPUTFILE
 echo ""
 
+echo "Converting file..."
+
 if [ "$USEMETADATA" = true ]; then
-	if [ "$USEART" = true ]; then
-		echo "Converting file"
-		echo "Writing metadata"
-		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$DIRECTORY/TMP-$OUTPUTFILE"
-		echo "Adding cover art"
-		ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$ARTLOCATION" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
-		echo "Removing temp files"
-		rm "$DIRECTORY/TMP-$OUTPUTFILE"
-	else
-		echo "Converting file"
-		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text -metadata title="$TITLE" -metadata date="$DATE" -metadata genre="$GENRE" -metadata show="$SHOW" -metadata season_number="$SEASON" -metadata episode_id="$EPISODE" -metadata episode_sort="$EPISODE" -metadata language="$LANGUAGE" -metadata hd_video="$QUALTIY" "$DIRECTORY/$OUTPUTFILE"
-	fi
-else
-	if [ "$USEART" = true ]; then
-		echo "Converting file"
-		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text "$DIRECTORY/TMP-$OUTPUTFILE"
-		echo "Adding cover art"
-		ffmpeg -i "$DIRECTORY/TMP-$OUTPUTFILE" -i "$ARTLOCATION" -c copy -loglevel warning -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
-		echo "Removing temp files"
-		rm "$DIRECTORY/TMP-$OUTPUTFILE"
-	else
-		echo "Converting file"
-		ffmpeg -i "$DIRECTORY/$INPUTFILE" -c copy -loglevel warning -c:s mov_text "$DIRECTORY/$OUTPUTFILE"
-	fi
+	./Metadata.sh $TMPLEVEL $DIRECTORY $INPUTFILE $TITLE $DATE $GENRE $SHOW $SEASON $EPISODE $LANGUAGE $QUALTIY $OUTPUTFILE
 fi
+
+if [ "$USESUBTITLES" = true ]; then
+	./Subtitles.sh $TMPLEVEL $TMPCHANGE $DIRECTORY $INPUTFILE $SUBTITLE $SUBTITLELANGUAGE $OUTPUTFILE
+fi
+
+if [ "$USEART" = true ]; then
+	./CoverArt.sh $TMPLEVEL $TMPCHANGE $DIRECTORY $INPUTFILE $ARTLOCATION $OUTPUTFILE
+fi
+
+./RemoveFiles.sh $DIRECTORY $OUTPUTFILE
 
 echo ""
 echo "DONE!"
