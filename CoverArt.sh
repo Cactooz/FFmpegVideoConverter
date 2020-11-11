@@ -17,5 +17,5 @@ if [ "$TMPCHANGE" = true ]; then
 		ffmpeg -i "$DIRECTORY/TMP$OUTPUTFILE" -i "$ARTLOCATION" -map 1 -map 0 -c copy -disposition:0 attached_pic -loglevel warning "$DIRECTORY/$OUTPUTFILE"
 	fi
 else
-	ffmpeg -i "$DIRECTORY/$INPUTFILE" -i "$ARTLOCATION" -c copy -map 1 -map 0 -disposition:0 attached_pic "$DIRECTORY/$OUTPUTFILE"
+	ffmpeg -i "$DIRECTORY/$INPUTFILE" -i "$ARTLOCATION" -c copy -map 1 -map 0 -disposition:0 attached_pic -loglevel warning "$DIRECTORY/$OUTPUTFILE"
 fi
