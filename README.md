@@ -7,6 +7,7 @@ But the script can download it for you if you don't have it installed.
 ## Features
 * Convert videos from different file formats
 * Add metadata
+* Add subtitles
 * Add cover art
 * No re-encoding needed
 
@@ -43,9 +44,9 @@ Recommended formats for cover art is .png or .jpg files.
 
 ### Very Likley
 * More metadata
-* Add subtitles .srt
 * More Optimized code
 * Looping through full directory
+* Multiple subtitles
 
 ### Possibly
 * .bat version for Windows
