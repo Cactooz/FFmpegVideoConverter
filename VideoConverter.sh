@@ -5,7 +5,6 @@ INSTALLFFMPEGLOOP=true
 ARTLOOP=true
 ARTDIRLOOP=true
 SUBTITLELOOP=true
-SUBTITLEDIRLOOP=true
 TMPLEVEL=0
 TMPCHANGE=false
 
@@ -33,13 +32,11 @@ if [ "$1" = "-h" ]; then
 	exit 0
 fi
 
-
 if ! FFMPEGLOCATION="$(command -v ffmpeg)" || [ -z $FFMPEGLOCATION ]; then
 	echo ""
 	echo "FFmpeg is not installed"
 	echo "Do you want install it? (yes/no)"
-	while [ "$INSTALLFFMPEGLOOP" = true ]
-	do
+	while [ "$INSTALLFFMPEGLOOP" = true ]; do
 		read INSTALLFFMPEGANSWER
 		case $INSTALLFFMPEGANSWER in
 			[Yy]* )
@@ -69,8 +66,7 @@ read -p "Input file: " INPUTFILE
 echo ""
 
 echo "Do you want to add metadata? (yes/no)"
-while [ "$METADATALOOP" = true ]
-do
+while [ "$METADATALOOP" = true ]; do
 	read METADATAANSWER
 	case $METADATAANSWER in
 		[Yy]* )
@@ -100,40 +96,11 @@ done
 echo ""
 
 echo "Do you want to add subtitles? (yes/no)"
-while [ "$SUBTITLELOOP" = true ]
-do
+while [ "$SUBTITLELOOP" = true ]; do
 	read SUBTITLEANSWER
 	case $SUBTITLEANSWER in
 		[Yy]* )
-			echo ""
-
-			echo "Is the subtitles in the same directory as: $DIRECTORY? (yes/no)"
-			while [ "$SUBTITLEDIRLOOP" = true ]
-			do
-				read SUBTITLEDIRANSWER
-				case $SUBTITLEDIRANSWER in
-					[Yy]* )
-						SUBTITLEDIR=$DIRECTORY
-
-						SUBTITLEDIRLOOP=false
-						;;
-					[Nn]* )
-						echo ""
-						read -p "Directory for subtitles: " SUBTITLEDIR
-
-						SUBTITLEDIRLOOP=false
-						;;
-					* ) echo "Please answer yes or no.";;
-				esac
-			done
-
-			echo ""
-			read -p "Subtitle file: " SUBTITLEFILE
-
-			SUBTITLE=$SUBTITLEDIR/$SUBTITLEFILE
-
-			echo ""
-			read -p "Subtitle language (example: eng): " SUBTITLELANGUAGE
+			./Subtitles.sh -a 0 - $DIRECTORY
 
 			USESUBTITLES=true
 			SUBTITLELOOP=false
@@ -150,8 +117,7 @@ done
 echo ""
 
 echo "Do you want to add cover art? (yes/no)"
-while [ "$ARTLOOP" = true ]
-do
+while [ "$ARTLOOP" = true ]; do
 	read ARTANSWER
 	case $ARTANSWER in
 		[Yy]* )

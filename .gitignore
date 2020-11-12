@@ -53,6 +53,10 @@
 # Temporary files
 TMP-*
 *.tmp
+*TMP*
+AddSubtitleFile.txt
+AddSubtitleLanguage.txt
+AddSubtitleMap.txt
 
 # Log files
 *.log
