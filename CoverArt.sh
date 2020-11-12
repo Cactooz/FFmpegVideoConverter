@@ -11,9 +11,9 @@ OUTPUTFILE=$6
 echo "Adding cover art"
 
 if [ "$TMPCHANGE" = true ]; then
-	if [ "$TMPLEVEL" > 2 ]; then
+	if (( "$TMPLEVEL" > 2 )); then
 		ffmpeg -i "$DIRECTORY/2TMP$OUTPUTFILE" -i "$ARTLOCATION" -map 1 -map 0 -c copy -disposition:0 attached_pic -loglevel warning "$DIRECTORY/$OUTPUTFILE"
-	elif [ "$TMPLEVEL" = 2 ]; then
+	elif (( "$TMPLEVEL" = 2 )); then
 		ffmpeg -i "$DIRECTORY/TMP$OUTPUTFILE" -i "$ARTLOCATION" -map 1 -map 0 -c copy -disposition:0 attached_pic -loglevel warning "$DIRECTORY/$OUTPUTFILE"
 	fi
 else
