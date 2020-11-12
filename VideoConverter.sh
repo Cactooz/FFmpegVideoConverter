@@ -14,6 +14,25 @@ echo "============================"
 echo "Video Converter using FFmpeg"
 echo "============================"
 
+if [ "$1" = "-h" ]; then
+	echo ""
+	echo "DESCRIPTION"
+	echo "A video converter Script using FFmpeg for Linux."
+	echo "Can add metadata, subtitles and cover art to the video."
+	echo ""
+	echo "COMMAND LAYOUT"
+	echo "./VideoConverter.sh"
+	echo ""
+	echo "NEEDED SCRIPTS"
+	echo "Metadata.sh for adding metadata"
+	echo "Subtitles.sh for adding subtitles"
+	echo "CoverArt.sh for adding subtitles"
+	echo "RemoveFiles.sh to remove temp files"
+	echo ""
+
+	exit 0
+fi
+
 
 if ! FFMPEGLOCATION="$(command -v ffmpeg)" || [ -z $FFMPEGLOCATION ]; then
 	echo ""
