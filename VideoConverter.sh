@@ -164,13 +164,14 @@ read -p "Output file: " OUTPUTFILE
 echo ""
 
 echo "Converting file..."
+echo ""
 
 if [ "$USEMETADATA" = true ]; then
 	./Metadata.sh $TMPLEVEL $DIRECTORY $INPUTFILE $TITLE $DATE $GENRE $SHOW $SEASON $EPISODE $LANGUAGE $QUALTIY $OUTPUTFILE
 fi
 
 if [ "$USESUBTITLES" = true ]; then
-	./Subtitles.sh $TMPLEVEL $TMPCHANGE $DIRECTORY $INPUTFILE $SUBTITLE $SUBTITLELANGUAGE $OUTPUTFILE
+	./Subtitles.sh -x $TMPLEVEL $TMPCHANGE $DIRECTORY $INPUTFILE $OUTPUTFILE
 fi
 
 if [ "$USEART" = true ]; then

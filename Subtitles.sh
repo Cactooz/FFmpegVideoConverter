@@ -5,12 +5,29 @@ TMPCHANGE=$3
 
 DIRECTORY=$4
 INPUTFILE=$5
-SUBTITLE=$6
-SUBTITLELANGUAGE=$7
-OUTPUTFILE=$8
+OUTPUTFILE=$6
 
 ADDLOOP=true
 SUBTITLEDIRLOOP=true
+
+getData() {
+	readData() {
+		local FILE="$DIRECTORY/$1"
+		DATA=
+		while IFS= read -r LINE; do
+			DATA="$DATA $LINE"
+		done < "$FILE"
+	}
+
+	readData AddSubtitleFile.txt
+	SUBTITLEFILEDATA=$DATA
+
+	readData AddSubtitleMap.txt
+	SUBTITLEMAPDATA=$DATA
+
+	readData AddSubtitleLanguage.txt
+	SUBTITLELANGUAGEDATA=$DATA
+}
 
 if [ "$1" = "-a" ]; then
 
@@ -67,19 +84,23 @@ if [ "$1" = "-a" ]; then
 fi
 
 if [ "$1" = "-x" ]; then
+	echo "Getting Subtitle Data"
+
+	getData
+
 	echo "Adding Subtitles"
 
 	if [ "$TMPCHANGE" = true ]; then
 		if (( "$TMPLEVEL" > 2 )); then
-			ffmpeg -i "$DIRECTORY/TMP$OUTPUTFILE" -i "$SUBTITLE" -map 0 -map 1 -c copy -c:s mov_text -metadata:s:s:0 language="$SUBTITLELANGUAGE" -loglevel warning "$DIRECTORY/2TMP$OUTPUTFILE"
+			ffmpeg -i "$DIRECTORY/TMP$OUTPUTFILE" $SUBTITLEFILEDATA -map 0 $SUBTITLEMAPDATA -c copy -c:s mov_text $SUBTITLELANGUAGEDATA -loglevel warning "$DIRECTORY/2TMP$OUTPUTFILE"
 		else
-			ffmpeg -i "$DIRECTORY/TMP$OUTPUTFILE" -i "$SUBTITLE" -map 0 -map 1 -c copy -c:s mov_text -metadata:s:s:0 language="$SUBTITLELANGUAGE" -loglevel warning "$DIRECTORY/$OUTPUTFILE"
+			ffmpeg -i "$DIRECTORY/TMP$OUTPUTFILE" $SUBTITLEFILEDATA -map 0 $SUBTITLEMAPDATA -c copy -c:s mov_text $SUBTITLELANGUAGEDATA -loglevel warning "$DIRECTORY/$OUTPUTFILE"
 		fi
 	else
 		if (( "$TMPLEVEL" > 1 )); then
-			ffmpeg -i "$DIRECTORY/$INPUTFILE" -i "$SUBTITLE" -map 0 -map 1 -c copy -c:s mov_text -metadata:s:s:0 language="$SUBTITLELANGUAGE" -loglevel warning "$DIRECTORY/TMP$OUTPUTFILE"
+			ffmpeg -i "$DIRECTORY/$INPUTFILE" $SUBTITLEFILEDATA -map 0 $SUBTITLEMAPDATA -c copy -c:s mov_text $SUBTITLELANGUAGEDATA -loglevel warning "$DIRECTORY/TMP$OUTPUTFILE"
 		else
-			ffmpeg -i "$DIRECTORY/$INPUTFILE" -i "$SUBTITLE" -map 0 -map 1 -c copy -c:s mov_text -metadata:s:s:0 language="$SUBTITLELANGUAGE" -loglevel warning "$DIRECTORY/$OUTPUTFILE"
+			ffmpeg -i "$DIRECTORY/$INPUTFILE" $SUBTITLEFILEDATA -map 0 $SUBTITLEMAPDATA -c copy -c:s mov_text $SUBTITLELANGUAGEDATA -loglevel warning "$DIRECTORY/$OUTPUTFILE"
 		fi
 	fi
 fi
