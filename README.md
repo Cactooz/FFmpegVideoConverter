@@ -7,7 +7,7 @@ But the script can download it for you if you don't have it installed.
 ## Features
 * Convert videos from different file formats
 * Add metadata
-* Add subtitles
+* Add multiple subtitles
 * Add cover art
 * No re-encoding needed
 
@@ -35,6 +35,13 @@ Current supported metadata
 * language
 * hd_video
 
+### Subtitles
+Add subtitles to your videos, the script supports multiple subtitles as well as mapping the right language to it.
+
+When adding .srt subtitle files to .mp4 files there will be some re-encoding needed. However, its quite fast becuase only the subtitles gets encoded.
+
+Recommended subtitle formats are .srt files.
+
 ### Cover Art
 Add cover art to your videos or audio files instead of the boring auto generated icon.
 
@@ -46,7 +53,7 @@ Recommended formats for cover art is .png or .jpg files.
 * More metadata
 * More Optimized code
 * Looping through full directory
-* Multiple subtitles
+* .mp4 or .mov output check
 
 ### Possibly
 * .bat version for Windows
