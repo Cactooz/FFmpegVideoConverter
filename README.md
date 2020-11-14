@@ -50,10 +50,11 @@ Recommended formats for cover art is .png or .jpg files.
 ## Coming Features
 
 ### Very Likley
-* More metadata
-* More Optimized code
-* Looping through full directory
+* Better function to add metadata
 * .mp4 or .mov output check
+* More metadata options
+* More optimized code
+* Looping through full directory
 
 ### Possibly
 * .bat version for Windows
