@@ -90,17 +90,15 @@ if [ "$1" = "-x" ]; then
 
 	echo "Adding Subtitles"
 
-	if [ "$TMPCHANGE" = true ]; then
-		if (( "$TMPLEVEL" > 2 )); then
-			ffmpeg -i "$DIRECTORY/TMP$OUTPUTFILE" $SUBTITLEFILEDATA -map 0 $SUBTITLEMAPDATA -c copy -c:s mov_text $SUBTITLELANGUAGEDATA -loglevel warning "$DIRECTORY/2TMP$OUTPUTFILE"
-		else
+	if (( "$TMPLEVEL" == 1 )); then
+		ffmpeg -i "$DIRECTORY/$INPUTFILE" $SUBTITLEFILEDATA -map 0 $SUBTITLEMAPDATA -c copy -c:s mov_text $SUBTITLELANGUAGEDATA -loglevel warning "$DIRECTORY/$OUTPUTFILE"
+	elif (( "$TMPLEVEL" == 2 )); then
+		if [ "$TMPCHANGE" = true ]; then
 			ffmpeg -i "$DIRECTORY/TMP$OUTPUTFILE" $SUBTITLEFILEDATA -map 0 $SUBTITLEMAPDATA -c copy -c:s mov_text $SUBTITLELANGUAGEDATA -loglevel warning "$DIRECTORY/$OUTPUTFILE"
-		fi
-	else
-		if (( "$TMPLEVEL" > 1 )); then
-			ffmpeg -i "$DIRECTORY/$INPUTFILE" $SUBTITLEFILEDATA -map 0 $SUBTITLEMAPDATA -c copy -c:s mov_text $SUBTITLELANGUAGEDATA -loglevel warning "$DIRECTORY/TMP$OUTPUTFILE"
 		else
-			ffmpeg -i "$DIRECTORY/$INPUTFILE" $SUBTITLEFILEDATA -map 0 $SUBTITLEMAPDATA -c copy -c:s mov_text $SUBTITLELANGUAGEDATA -loglevel warning "$DIRECTORY/$OUTPUTFILE"
+			ffmpeg -i "$DIRECTORY/TMP$OUTPUTFILE" $SUBTITLEFILEDATA -map 0 $SUBTITLEMAPDATA -c copy -c:s mov_text $SUBTITLELANGUAGEDATA -loglevel warning "$DIRECTORY/2TMP$OUTPUTFILE"
 		fi
+	elif (( "$TMPLEVEL" == 3 )); then
+		ffmpeg -i "$DIRECTORY/TMP$OUTPUTFILE" $SUBTITLEFILEDATA -map 0 $SUBTITLEMAPDATA -c copy -c:s mov_text $SUBTITLELANGUAGEDATA -loglevel warning "$DIRECTORY/2TMP$OUTPUTFILE"
 	fi
 fi
