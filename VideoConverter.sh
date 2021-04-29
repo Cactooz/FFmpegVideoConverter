@@ -27,6 +27,7 @@ if [ "$1" = "-h" ]; then
 	echo "Subtitles.sh for adding subtitles"
 	echo "CoverArt.sh for adding subtitles"
 	echo "RemoveFiles.sh to remove temp files"
+	echo "BulkConvert.sh in order to convert multiple files in a folder"
 	echo ""
 
 	exit 0
