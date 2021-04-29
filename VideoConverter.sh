@@ -61,6 +61,15 @@ else
 	echo "This is now the working directory: $DIRECTORY"
 fi
 
+if [ "$1" = "-b" ]; then
+	read -p "Convert from file format: " $INPUTFORMAT
+	read -p "Convert to file format: " $OUTPUTFORMAT
+	
+	./BulkConvert.sh $DIRECTORY $INPUTFORMAT $OUTPUTFORMAT
+	
+	exit 0
+fi
+
 echo ""
 read -p "Input file: " INPUTFILE
 echo ""
