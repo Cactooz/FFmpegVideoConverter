@@ -62,10 +62,17 @@ else
 fi
 
 if [ "$1" = "-b" ]; then
+	echo ""
+	echo "Bulk conversion"
+	
 	read -p "Convert from file format: " $INPUTFORMAT
 	read -p "Convert to file format: " $OUTPUTFORMAT
 	
 	./BulkConvert.sh $DIRECTORY $INPUTFORMAT $OUTPUTFORMAT
+
+	echo ""
+	echo "DONE!"
+	echo ""
 	
 	exit 0
 fi
