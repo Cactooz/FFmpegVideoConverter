@@ -47,7 +47,7 @@ if ! FFMPEGLOCATION="$(command -v ffmpeg)" || [ -z $FFMPEGLOCATION ]; then
 				;;
 			[Nn]* )
 				echo "Sadly you can't use this script without FFmpeg"
-				exit
+				exit 1
 				;;
 			* ) echo "Please answer yes or no.";;
 		esac
