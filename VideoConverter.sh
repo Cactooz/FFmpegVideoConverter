@@ -63,19 +63,26 @@ else
 fi
 
 if [ "$1" = "-b" ]; then
-	echo ""
-	echo "Bulk conversion"
-	
-	read -p "Convert from file format: " $INPUTFORMAT
-	read -p "Convert to file format: " $OUTPUTFORMAT
-	
-	./BulkConvert.sh $DIRECTORY $INPUTFORMAT $OUTPUTFORMAT
+	if [ -f "./BulkConvert.sh" ]; then
+		echo ""
+		echo "Bulk conversion"
 
-	echo ""
-	echo "DONE!"
-	echo ""
-	
-	exit 0
+		read -p "Convert from file format: " $INPUTFORMAT
+		read -p "Convert to file format: " $OUTPUTFORMAT
+
+		./BulkConvert.sh $DIRECTORY $INPUTFORMAT $OUTPUTFORMAT
+
+		echo ""
+		echo "DONE!"
+		echo ""
+
+		exit 0
+	else
+		echo ""
+		echo "Could not find the BulkConvert.sh file"
+		
+		exit 1
+	fi
 fi
 
 echo ""
