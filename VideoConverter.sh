@@ -29,6 +29,11 @@ if [ "$1" = "-h" ]; then
 	echo "RemoveFiles.sh to remove temp files"
 	echo "BulkConvert.sh in order to convert multiple files in a folder"
 	echo ""
+	echo "EXIT/ERROR CODES"
+	echo "0 - No errors"
+	echo "1 - Can't find FFmpeg"
+	echo "2 - Can't find the BulkConvert.sh script for bulk conversion"
+	echo ""
 
 	exit 0
 fi
