@@ -82,7 +82,7 @@ if [ "$1" = "-b" ]; then
 		echo "Could not find the BulkConvert.sh file"
 		echo "Bulk conversion does not work without that script"
 		
-		exit 1
+		exit 2
 	fi
 fi
 
